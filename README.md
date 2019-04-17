@@ -13,14 +13,21 @@ Run ssh.sh to ssh into the server.
 
 Run stop.sh to stop and dump the server if you choose.
 
-## Server Account Information
+## How automation is implemented
+post-merge is a git hook shell script that is ran after a pull is merged to the local repository. This shell script changes the file update to "0".
 
-### MySQL Information
+When the database is dumped during stop.sh, the file update is changed to "1".
+
+When start.sh is ran, it reads the file update, and if it is "0", then it applies the database dump to the database.
+
+# Server Account Information
+
+## MySQL Information
 Hostname - localhost
 Username - root
 Password - root
 Database - scotchbox
 
-### Wordpress Settings
+## Wordpress Settings
 Username - WebAdmin
 Password - gG5XCvUSL4keOwamsEz
