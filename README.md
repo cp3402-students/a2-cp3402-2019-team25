@@ -1,3 +1,14 @@
+# Project Development
+[Local Development Environment](https://github.com/cp3402-students/env-cp3402-2019-team25)
+
+[Database](https://github.com/Xett/database-cp3402-2019-team25)
+
+[Theme](https://github.com/Xett/theme-cp3402-2019-team25)
+
+The local Database repository in the Local Development Environment should be used to update the Database repository, no cloning is needed.
+
+Themes and Plugins should be worked on from their own cloned repositories. Automated plugin updates are updated along their master branch.
+
 # Usage
 Run install.sh to install .git hooks. Add github ssh key named id_rsa to the .ssh folder.
 
