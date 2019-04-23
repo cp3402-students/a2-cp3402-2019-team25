@@ -35,10 +35,10 @@ jobs:
       - run: wp --info
 
       # Install site plugins and themes
-      - run: [[ $(ls -A ~/project/themes) ]] && rsync -av ~/project/themes /var/www/html/wp-content
-      - run: [[ $(ls -A ~/project/plugins) ]] && rsync -av ~/project/plugins /var/www/html/wp-content
-      - run: [[ $(ls -A ~/project/themes) ]] && rm -rf ~/project/themes
-      - run: [[ $(ls -A ~/project/plugins) ]] && rm -rf ~/project/plugins
+      - run: if [ ${#~/project/themes/*[@]} -gt 0 ]; then rsync -av ~/project/themes /var/www/html/wp-content; fi
+      - run: if [ ${#~/project/plugins/*[@]} -gt 0 ]; then rsync -av ~/project/plugins /var/www/html/wp-content; fi
+      - run: if [ ${#~/project/themes/*[@]} -gt 0 ]; then rm -rf ~/project/themes; fi
+      - run: if [ ${#~/project/plugins/*[@]} -gt 0 ]; then rm -rf ~/project/plugins; fi
 
       # Install WordPress
       - run: wp config create --path="/var/www/html" --dbname=circle_test --dbuser=root --dbpass="" --dbhost="127.0.0.1" --allow-root --skip-check
