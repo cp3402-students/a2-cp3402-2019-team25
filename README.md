@@ -2,7 +2,8 @@
 
 # Installation
 
-Run install.sh to install .git hooks. Add github ssh key named id_rsa to the .ssh folder.
+Add github ssh key named id_rsa to the .ssh folder.
+Run install.sh to install .git hooks. If no ssh key is found, install.sh will generate a new one. After the ssh key is generated, see [here](https://help.github.com/en/articles/adding-a-new-ssh-key-to-your-github-account) for how to link it to your github account. This is so you can ssh into the staging server.
 
 # Usage
 

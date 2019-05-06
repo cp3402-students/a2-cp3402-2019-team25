@@ -31,6 +31,10 @@ install()
    else
       cp -rl $PROJECT_DIRECTORY"/hooks" $PROJECT_DIRECTORY"/.git"
    fi
+   if [ ! -f ".ssh/id_rsa" ]
+   then
+      read -p "Github email address: " EMAIL
+      ssh-keygen -t rsa -b 4096 -C "$EMAIL" -f ".ssh/id_rsa"
 }
 install
 # Pause at end
