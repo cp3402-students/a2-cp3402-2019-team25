@@ -1,3 +1,4 @@
+[![CircleCI](https://circleci.com/gh/cp3402-students/a2-cp3402-2019-team25/tree/master.svg?style=svg)](https://circleci.com/gh/cp3402-students/a2-cp3402-2019-team25/tree/master)
 # Project Development
 [Local Development Environment](https://github.com/cp3402-students/env-cp3402-2019-team25)
 
