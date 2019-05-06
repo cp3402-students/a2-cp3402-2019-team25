@@ -32,7 +32,7 @@ install()
       cp -rl $PROJECT_DIRECTORY"/hooks" $PROJECT_DIRECTORY"/.git"
    fi
 }
-
+install
 # Pause at end
 read -p "Press enter to continue"
 exit
