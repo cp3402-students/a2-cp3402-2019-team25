@@ -6,9 +6,9 @@
 
 [Theme](https://github.com/Xett/theme-cp3402-2019-team25)
 
-The local Database repository in the Local Development Environment should be used to update the Database repository, no cloning is needed.
+The local Database repository in the Local Development Environment should be used to update the Database, Themes and Plugins. There is no other cloning needed, besides cloning the dev environment.
 
-Themes and Plugins should be worked on from their own cloned repositories. Automated plugin updates are updated along their master branch.
+Submodules are automatically updated along the master branch.
 
 # Usage
 Run install.sh to install .git hooks. Add github ssh key named id_rsa to the .ssh folder.
