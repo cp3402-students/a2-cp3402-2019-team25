@@ -4,7 +4,7 @@
 #
 version: 2
 jobs:
-  build:
+  build-test:
     docker:
       - image: wordpress:php7.2-apache
         entrypoint: "docker-entrypoint.sh"
@@ -53,9 +53,11 @@ jobs:
       - run: wp theme activate --path="/var/www/html" theme-cp3402-2019-team25 --allow-root
 #      - run: wp plugin activate --path="/var/www/html" plugin-name --allow-root
 
-
-
-      # run tests with phpunit or codecept
-      - run: curl 127.0.0.1
-
       - run: service apache2 start
+  staging:
+    requires:
+      - build-test
+  deployment:
+    type: approval
+    requires:
+      - staging
