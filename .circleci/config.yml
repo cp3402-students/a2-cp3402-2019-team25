@@ -10,10 +10,8 @@ jobs:
         entrypoint: "docker-entrypoint.sh"
         command: "apache2-foreground"
       - image: circleci/mysql:5.7-ram
-
     steps:
       - checkout
-
       - run:
          name: update and install dependencies
          command: |
@@ -26,20 +24,17 @@ jobs:
           command: |
             git submodule init
             git submodule update --remote
-
       # Install WP CLI
       - run: curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
       - run: php wp-cli.phar --info
       - run: chmod +x wp-cli.phar
       - run: mv wp-cli.phar /usr/local/bin/wp
       - run: wp --info
-
       # Install site plugins and themes
       - run: rsync -av ~/project/themes /var/www/html/wp-content
       - run: rsync -av ~/project/plugins /var/www/html/wp-content
       - run: rm -rf ~/project/themes
       - run: rm -rf ~/project/plugins
-
       # Install WordPress
       - run: wp config create --path="/var/www/html" --dbname=circle_test --dbuser=root --dbpass="" --dbhost="127.0.0.1" --allow-root --skip-check
       - run: wp core install --path="/var/www/html" --url="localhost" --title="123" --admin_user=123 --admin_password=123 --admin_email=admin@example.com --allow-root
@@ -52,10 +47,16 @@ jobs:
             echo $?
       - run: wp theme activate --path="/var/www/html" theme-cp3402-2019-team25 --allow-root
 #      - run: wp plugin activate --path="/var/www/html" plugin-name --allow-root
-
       - run: service apache2 start
+  staging:
+    steps:
+      - checkout
+      - run: echo "staging"
 workflows:
   version: 2
   build_and_test:
     jobs:
       - build-test
+      - staging:
+        requires:
+          - build-test
