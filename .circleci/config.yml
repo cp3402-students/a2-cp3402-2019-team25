@@ -54,3 +54,8 @@ jobs:
 #      - run: wp plugin activate --path="/var/www/html" plugin-name --allow-root
 
       - run: service apache2 start
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
