@@ -4,7 +4,7 @@
 #
 version: 2
 jobs:
-  build:
+  build-test:
     docker:
       - image: wordpress:php7.2-apache
         entrypoint: "docker-entrypoint.sh"
@@ -58,4 +58,4 @@ workflows:
   version: 2
   build_and_test:
     jobs:
-      - build
+      - build-test
