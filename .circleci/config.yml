@@ -49,6 +49,8 @@ jobs:
 #      - run: wp plugin activate --path="/var/www/html" plugin-name --allow-root
       - run: service apache2 start
   staging:
+    machine:
+      enabled: true
     steps:
       - checkout
       - run: echo "staging"
