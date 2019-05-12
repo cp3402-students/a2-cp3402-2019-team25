@@ -82,6 +82,7 @@ jobs:
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rsync -av ~/themes /var/www/html/wp-content"
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rsync -av ~/plugins /var/www/html/wp-content"
       # Install WordPress
+      - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp core download --path='/var/www/html' --allow-root
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp config create --path='/var/www/html' --dbname=wordpress --dbuser=WebAdmin --dbpass='gG5XCvUSL4keOwamsEz' --dbhost='127.0.0.1'" --allow-root
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp core install --path='/var/www/html' --url='https:\/\/staging.cp3402-2019-team25.dns-cloud.net' --admin_user=WpAdmin --admin_password=gG5XCvUSL4keOwamsEz --admin_email=admin@example.com" --allow-root
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo sed -i 's/192.168.33.10/https:\/\/staging.cp3402-2019-team25.dns-cloud.net/g' ~/database/database-cp3402-2019-team25/mysql.sql"
@@ -96,7 +97,7 @@ jobs:
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -rf ~/database"
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -rf ~/themes"
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -rf ~/plugins"
-      - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -f ~/wp-cli.phar"    
+      - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -f ~/wp-cli.phar"
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo service apache2 start"
   deployment:
     machine:
