@@ -158,6 +158,8 @@ workflows:
       - staging:
           requires:
               - build-test
+  deployment:
+    jobs:
       - deployment:
           type: approval
           requires:
