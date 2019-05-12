@@ -57,6 +57,7 @@ jobs:
             - "d7:1c:7d:51:cc:ec:09:2d:91:29:f9:80:5c:27:fc:46"
       - checkout
       - run: ping -c 4 staging.cp3402-2019-team25.dns-cloud.net
+      - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net
   deployment:
     machine:
       enabled: true
