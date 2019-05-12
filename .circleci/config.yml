@@ -57,7 +57,8 @@ jobs:
             - "d7:1c:7d:51:cc:ec:09:2d:91:29:f9:80:5c:27:fc:46"
       - checkout
       - run: ping -c 4 staging.cp3402-2019-team25.dns-cloud.net
-      - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "echo 'test';"
+      - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo apt-get update; sudo apt-get install -y apache2; sudo apt-get install -y mysql-client; sudo apt-get install -y rsync; sudo apt-get install -y git;"
+      - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo service apache2 restart;"
   deployment:
     machine:
       enabled: true
