@@ -162,5 +162,3 @@ workflows:
     jobs:
       - deployment:
           type: approval
-          requires:
-              - staging
