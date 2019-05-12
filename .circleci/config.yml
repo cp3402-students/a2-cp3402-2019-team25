@@ -70,21 +70,21 @@ jobs:
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "mv wp-cli.phar /usr/local/bin/wp"
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "wp --info"
       # Install site plugins and themes
-      - run: rsync -av ~/a2-cp3402-2019-team25/themes /var/www/html/wp-content
-      - run: rsync -av ~/a2-cp3402-2019-team25/plugins /var/www/html/wp-content
+      - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "rsync -av ~/a2-cp3402-2019-team25/themes /var/www/html/wp-content"
+      - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "rsync -av ~/a2-cp3402-2019-team25/plugins /var/www/html/wp-content"
       # Install WordPress
-      - run: wp config create --path="/var/www/html" --dbname=wordpress --dbuser=wpadmin --dbpass="" --dbhost="127.0.0.1"
-      - run: wp core install --path="/var/www/html" --url="https:\/\/staging.cp3402-2019-team25.dns-cloud.net" --title="123" --admin_user=WpAdmin --admin_password=123 --admin_email=admin@example.com
-      - run: sed -i 's/192.168.33.10/https:\/\/staging.cp3402-2019-team25.dns-cloud.net/g' ~/a2-cp3402-2019-team25/database/database-cp3402-2019-team25/mysql.sql
+      - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "wp config create --path='/var/www/html' --dbname=wordpress --dbuser=WebAdmin --dbpass='gG5XCvUSL4keOwamsEz' --dbhost='127.0.0.1'"
+      - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "wp core install --path='/var/www/html' --url='https:\/\/staging.cp3402-2019-team25.dns-cloud.net' --admin_user=WpAdmin --admin_password=gG5XCvUSL4keOwamsEz --admin_email=admin@example.com"
+      - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sed -i 's/192.168.33.10/https:\/\/staging.cp3402-2019-team25.dns-cloud.net/g' ~/a2-cp3402-2019-team25/database/database-cp3402-2019-team25/mysql.sql"
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "mysql -u'WebAdmin' -p'gG5XCvUSL4keOwamsEz' -h 127.0.0.1 wordpress < ~/a2-cp3402-2019-team25/database/database-cp3402-2019-team25/mysql.sql"
       - run:
          name: is isntalled
          command: |
-            wp core is-installed --path="/var/www/html" --allow-root
-            echo $?
-      - run: wp theme activate --path="/var/www/html" theme-cp3402-2019-team25 --allow-root
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "wp core is-installed --path='/var/www/html' --allow-root"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "echo $?"
+      - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "wp theme activate --path='/var/www/html' theme-cp3402-2019-team25 --allow-root"
 #      - run: wp plugin activate --path="/var/www/html" plugin-name --allow-root
-      - run: rm -rf ~/a2-cp3402-2019-team25
+      - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "rm -rf ~/a2-cp3402-2019-team25"
   deployment:
     machine:
       enabled: true
