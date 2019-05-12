@@ -103,6 +103,9 @@ jobs:
     machine:
       enabled: true
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "68:10:2e:d0:ec:4b:2c:44:17:cd:97:50:18:d0:70:39"
       - checkout
       - run: ping -c 4 deployment.cp3402-2019-team25.dns-cloud.net
       - run:
