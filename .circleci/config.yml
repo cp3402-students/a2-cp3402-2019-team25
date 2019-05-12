@@ -61,8 +61,8 @@ jobs:
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo service apache2 stop"
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo git clone https://github.com/cp3402-students/a2-cp3402-2019-team25.git"
       # Create WpAdmin user and wordpress database in mysql
-      - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "mysql -u'root' -p -e 'CREATE DATABASE wordpress'"
-      - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "mysql -u'root' -p -e 'GRANT ALL PRIVILEGES ON wordpress.* TO \'WebAdmin\'@\'localhost\' IDENTIFIED BY \'gG5XCvUSL4keOwamsEz\''"
+      - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "mysql -u'root' -p'' -e 'CREATE DATABASE wordpress'"
+      - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "mysql -u'root' -p'' -e 'GRANT ALL PRIVILEGES ON wordpress.* TO \'WebAdmin\'@\'localhost\' IDENTIFIED BY \'gG5XCvUSL4keOwamsEz\''"
       # Install WP CLI
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar"
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "php wp-cli.phar --info"
