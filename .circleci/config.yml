@@ -67,7 +67,7 @@ jobs:
             git submodule update --remote
       # Create WpAdmin user and wordpress database in mysql
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo mysql -u'root' -e 'CREATE DATABASE IF NOT EXISTS wordpress'"
-      - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sed -i 's/scotchbox/wordpress/g' ~/a2-cp3402-2019-team25/database/database-cp3402-2019-team25/create_user.sql"
+      - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sed -i 's/scotchbox/wordpress/g' ~/project/database/database-cp3402-2019-team25/create_user.sql"
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo mysql -u'root' < ~/project/database/database-cp3402-2019-team25/create_user.sql"
       # Install WP CLI
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar"
