@@ -58,6 +58,7 @@ jobs:
       - checkout
       - run: ping -c 4 staging.cp3402-2019-team25.dns-cloud.net
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net
+      - run: echo "test"
   deployment:
     machine:
       enabled: true
