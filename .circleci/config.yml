@@ -67,7 +67,6 @@ jobs:
       - run: scp -r plugins CircleCI@staging.cp3402-2019-team25.dns-cloud.net:plugins
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo apt-get update; sudo apt-get install -y apache2 mysql-server mysql-client php-pear php-fpm php-dev php-zip php-curl php-xmlrpc php-gd php-mysql php-mbstring php-xml libapache2-mod-php rsync git"
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo service apache2 stop"
-      - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo git clone https://github.com/cp3402-students/a2-cp3402-2019-team25.git"
       # Create WpAdmin user and wordpress database in mysql
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo mysql -u'root' -e 'CREATE DATABASE IF NOT EXISTS wordpress'"
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo sed -i 's/scotchbox/wordpress/g' ~/database/database-cp3402-2019-team25/create_user.sql"
@@ -97,6 +96,7 @@ jobs:
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -rf ~/database"
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -rf ~/themes"
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -rf ~/plugins"
+      - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -f ~/wp-cli.phar"
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo service apache2 start"
   deployment:
     machine:
