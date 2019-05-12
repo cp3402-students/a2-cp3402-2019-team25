@@ -57,7 +57,7 @@ jobs:
             - "d7:1c:7d:51:cc:ec:09:2d:91:29:f9:80:5c:27:fc:46"
       - checkout
       - run: ping -c 4 staging.cp3402-2019-team25.dns-cloud.net
-      - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo apt-get update; sudo apt-get install -y apache2 mysql-server mysql-client sudo apt install php-pear php-fpm php-dev php-zip php-curl php-xmlrpc php-gd php-mysql php-mbstring php-xml libapache2-mod-php rsync git"
+      - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo apt-get update; sudo apt-get install -y apache2 mysql-server mysql-client php-pear php-fpm php-dev php-zip php-curl php-xmlrpc php-gd php-mysql php-mbstring php-xml libapache2-mod-php rsync git"
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo service apache2 stop"
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo git clone https://github.com/cp3402-students/a2-cp3402-2019-team25.git"
       # Create WpAdmin user and wordpress database in mysql
