@@ -105,8 +105,8 @@ jobs:
       - run: git config --global user.email "3954937+Xett@users.noreply.github.com"
       - run: git config --global user.name "Xett"
       - run: git add --all
-      - run: git commit -m "Update submodule commit references"
-      - run: git push
+      - run: git commit -m "Update submodule commit references" || true
+      - run: git push || true
   deployment:
     machine:
       enabled: true
