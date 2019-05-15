@@ -186,3 +186,14 @@ workflows:
     jobs:
       - deployment:
           type: approval
+  daily-deployment:
+    triggers:
+      - schedule:
+          cron: "45 23 * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - deployment:
+          type: approval
