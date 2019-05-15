@@ -156,6 +156,12 @@ jobs:
 workflows:
   version: 2
   staging:
+    jobs:
+      - build-test
+      - staging:
+          requires:
+              - build-test
+  hourly-staging:
     triggers:
       - schedule:
           cron: "0 * * * *"
