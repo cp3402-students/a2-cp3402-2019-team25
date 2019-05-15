@@ -40,7 +40,7 @@ jobs:
       - run: wp core install --path="/var/www/html" --url="localhost" --title="123" --admin_user=123 --admin_password=123 --admin_email=admin@example.com --allow-root
       - run: sed -i 's/192.168.33.10/localhost/g' ~/project/database/database-cp3402-2019-team25/mysql.sql
       - run: mysql -u'root' -h 127.0.0.1 circle_test < ~/project/database/database-cp3402-2019-team25/mysql.sql
-      #- run:
+      - run:
          name: is installed
          command: |
             wp core is-installed --path="/var/www/html" --allow-root
@@ -62,7 +62,6 @@ jobs:
           command: |
             git submodule init
             git submodule update --remote
-      - run:
       - run: scp -r database CircleCI@staging.cp3402-2019-team25.dns-cloud.net:database
       - run: scp -r themes CircleCI@staging.cp3402-2019-team25.dns-cloud.net:themes
       - run: scp -r plugins CircleCI@staging.cp3402-2019-team25.dns-cloud.net:plugins
@@ -100,6 +99,9 @@ jobs:
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -rf ~/plugins"
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -f ~/wp-cli.phar"
       - run: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo service apache2 start"
+      - run: git add --all
+      - run: git commit -m "Update submodule commit references"
+      - run: git push
   deployment:
     machine:
       enabled: true
