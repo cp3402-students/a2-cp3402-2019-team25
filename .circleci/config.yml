@@ -173,7 +173,6 @@ jobs:
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rsync -av ~/themes /var/www/html/wp-content"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rsync -av ~/plugins /var/www/html/wp-content"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp theme activate --path='/var/www/html' theme-cp3402-2019-team25 --allow-root"
-#            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "wp plugin activate --path='/var/www/html' plugin-name --allow-root"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -rf ~/database"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -rf ~/themes"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -rf ~/plugins"
