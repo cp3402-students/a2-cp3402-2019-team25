@@ -46,10 +46,9 @@ jobs:
           command: |
             rsync -av ~/project/themes /var/www/html/wp-content
             rsync -av ~/project/plugins /var/www/html/wp-content
+            wp theme activate --path="/var/www/html" theme-cp3402-2019-team25 --allow-root
             rm -rf ~/project/themes
             rm -rf ~/project/plugins
-            wp theme activate --path="/var/www/html" theme-cp3402-2019-team25 --allow-root
-            wp plugin activate --path="/var/www/html" plugin-name --allow-root
       - run:
           name: Start apache2 webserver
           command: service apache2 start
