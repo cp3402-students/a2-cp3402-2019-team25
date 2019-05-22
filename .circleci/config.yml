@@ -83,6 +83,16 @@ jobs:
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo mv wp-cli.phar /usr/local/bin/wp"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp --info"
       - run:
+          name: Download and install WordPress
+          command: |
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp core download --path='/var/www/html' --force --allow-root"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp config create --path='/var/www/html' --force --dbname=wordpress --dbuser=WebAdmin --dbpass='gG5XCvUSL4keOwamsEz' --dbhost='127.0.0.1'" --allow-root
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp core install --path='/var/www/html' --url='https:\/\/staging.cp3402-2019-team25.dns-cloud.net' --title='a2-cp3402-2019-team25' --admin_user=WpAdmin --admin_password=gG5XCvUSL4keOwamsEz --admin_email=admin@example.com" --allow-root
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo sed -i 's/192.168.33.10/staging.cp3402-2019-team25.dns-cloud.net/g' ~/database/database-cp3402-2019-team25/mysql.sql"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo mysql -u'WebAdmin' -p'gG5XCvUSL4keOwamsEz' -h 127.0.0.1 wordpress < ~/database/database-cp3402-2019-team25/mysql.sql"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp core is-installed --path='/var/www/html' --allow-root"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "echo $?"
+      - run:
           name: Copy database, themes and plugins
           command: |
             scp -r database CircleCI@staging.cp3402-2019-team25.dns-cloud.net:database
@@ -98,17 +108,6 @@ jobs:
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp plugin deactivate elementor-pro --allow-root"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp plugin deactivate wordpress-seo --allow-root"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp plugin deactivate w3-total-cache --allow-root"
-
-      - run:
-          name: Download and install WordPress
-          command: |
-            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp core download --path='/var/www/html' --force --allow-root"
-            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp config create --path='/var/www/html' --force --dbname=wordpress --dbuser=WebAdmin --dbpass='gG5XCvUSL4keOwamsEz' --dbhost='127.0.0.1'" --allow-root
-            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp core install --path='/var/www/html' --url='https:\/\/staging.cp3402-2019-team25.dns-cloud.net' --title='a2-cp3402-2019-team25' --admin_user=WpAdmin --admin_password=gG5XCvUSL4keOwamsEz --admin_email=admin@example.com" --allow-root
-            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo sed -i 's/192.168.33.10/staging.cp3402-2019-team25.dns-cloud.net/g' ~/database/database-cp3402-2019-team25/mysql.sql"
-            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo mysql -u'WebAdmin' -p'gG5XCvUSL4keOwamsEz' -h 127.0.0.1 wordpress < ~/database/database-cp3402-2019-team25/mysql.sql"
-            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp core is-installed --path='/var/www/html' --allow-root"
-            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "echo $?"
       - run:
           name: Create WpAdmin user and wordpress database on the MYSQL server
           command: |
