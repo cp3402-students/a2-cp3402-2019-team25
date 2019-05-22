@@ -94,10 +94,6 @@ jobs:
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rsync -av ~/database /var/www/html/wp-content"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rsync -av ~/themes /var/www/html/wp-content"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp theme activate --path='/var/www/html' theme-cp3402-2019-team25 --allow-root"
-            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp plugin deactivate --path='/var/www/html' wp-scss --allow-root"
-            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp plugin deactivate --path='/var/www/html' elementor-pro --allow-root"
-            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp plugin deactivate --path='/var/www/html' wordpress-seo --allow-root"
-            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp plugin deactivate --path='/var/www/html' w3-total-cache --allow-root"
       - run:
           name: Download and install WordPress
           command: |
@@ -121,6 +117,13 @@ jobs:
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -rf ~/themes"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -rf ~/plugins"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -f ~/wp-cli.phar"
+      - run:
+          name: Deactivate Plugins
+          command: |
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp plugin deactivate --path='/var/www/html' wp-scss --allow-root"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp plugin deactivate --path='/var/www/html' elementor-pro --allow-root"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp plugin deactivate --path='/var/www/html' wordpress-seo --allow-root"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp plugin deactivate --path='/var/www/html' w3-total-cache --allow-root"
       - run:
           name: Start apache2 webserver
           command: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo service apache2 start"
