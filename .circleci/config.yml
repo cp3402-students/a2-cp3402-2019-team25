@@ -85,8 +85,8 @@ jobs:
       - run:
           name: Copy database, themes and plugins
           command: |
-            scp -r database CircleCI@staging.cp3402-2019-team25.dns-cloud.net
-            scp -r themes CircleCI@staging.cp3402-2019-team25.dns-cloud.net
+            scp -r database CircleCI@staging.cp3402-2019-team25.dns-cloud.net:database
+            scp -r themes CircleCI@staging.cp3402-2019-team25.dns-cloud.net:plugins
             rsync -avh -e ssh plugins CircleCI@staging.cp3402-2019-team25.dns-cloud.net:/var/www/html/wp-content/plugins
       - run:
           name: Install website database plugins and themes, and cleanup
