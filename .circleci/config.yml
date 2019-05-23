@@ -91,22 +91,26 @@ jobs:
             tar czf database.tar.gz database
             tar czf themes.tar.gz themes
             tar czf plugins.tar.gz plugins
+            tar czf uploads.tar.gz plugins
       - run:
           name: Copy database, themes and plugins
           command: |
             scp database.tar.gz CircleCI@staging.cp3402-2019-team25.dns-cloud.net:~/
             scp themes.tar.gz CircleCI@staging.cp3402-2019-team25.dns-cloud.net:~/
             scp plugins.tar.gz CircleCI@staging.cp3402-2019-team25.dns-cloud.net:~/
+            scp uploads.tar.gz CircleCI@staging.cp3402-2019-team25.dns-cloud.net:~/
       - run:
           name: Clean themes and plugins
           command: |
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -r /var/www/html/wp-content/themes"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -r /var/www/html/wp-content/plugins"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -r /var/www/html/wp-content/uploads"
       - run:
           name: Extract database, themes and plugins
           command: |
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo tar -C /var/www/html/wp-content -zxvf ~/themes.tar.gz"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo tar -C /var/www/html/wp-content -zxvf ~/plugins.tar.gz"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo tar -C /var/www/html/wp-content -zxvf ~/uploads.tar.gz"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo tar -C ~/ -zxvf ~/database.tar.gz"
       - run:
           name: Install website database plugins and themes, and cleanup
@@ -136,6 +140,7 @@ jobs:
             rm database.tar.gz
             rm themes.tar.gz
             rm plugins.tar.gz
+            rm uploads.tar.gz
       - run:
           name: Deactivate Plugins
           command: |
@@ -143,10 +148,6 @@ jobs:
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp plugin deactivate --path='/var/www/html' elementor-pro --allow-root"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp plugin deactivate --path='/var/www/html' wordpress-seo --allow-root"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp plugin deactivate --path='/var/www/html' w3-total-cache --allow-root"
-      - run:
-          name: Move uploaded files
-          command: |
-            rsync -avh -e ssh uploads CircleCI@staging.cp3402-2019-team25.dns-cloud.net:/var/www/html/wp-content
       - run:
           name: Close permissions
           command: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo chmod -R 755 /var/www/html/wp-content"
@@ -168,15 +169,16 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - "68:10:2e:d0:ec:4b:2c:44:17:cd:97:50:18:d0:70:39"
+      - checkout
       - run:
           name: Ping server to see it is alive
-          command: ping -c 4 deployment.cp3402-2019-team25.dns-cloud.net
+          command: ping -c 4 staging.cp3402-2019-team25.dns-cloud.net
       - run:
           name: Stop apache2 webserver
-          command: ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo service apache2 stop"
+          command: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo service apache2 stop"
       - run:
           name: Set permissions to be open
-          command: ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo chmod -R 777 /var/www/html/wp-content"
+          command: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo chmod -R 777 /var/www/html/wp-content"
       - run:
           name: Pull Submodules
           command: |
@@ -184,83 +186,84 @@ jobs:
             git submodule update --remote
       - run:
           name: Update and install dependencies
-          command: ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo apt-get update; sudo apt-get install -y apache2 mysql-server mysql-client php-pear php-fpm php-dev php-zip php-curl php-xmlrpc php-gd php-mysql php-mbstring php-xml libapache2-mod-php rsync git"
+          command: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo apt-get update; sudo apt-get install -y apache2 mysql-server mysql-client php-pear php-fpm php-dev php-zip php-curl php-xmlrpc php-gd php-mysql php-mbstring php-xml libapache2-mod-php rsync git"
       - run:
           name: Install WP CLI
           command: |
-            ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar"
-            ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo php wp-cli.phar --info"
-            ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo chmod +x wp-cli.phar"
-            ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo mv wp-cli.phar /usr/local/bin/wp"
-            ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo wp --info"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo php wp-cli.phar --info"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo chmod +x wp-cli.phar"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo mv wp-cli.phar /usr/local/bin/wp"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp --info"
       - run:
           name: Archive database, themes and plugins
           command: |
             tar czf database.tar.gz database
             tar czf themes.tar.gz themes
             tar czf plugins.tar.gz plugins
+            tar czf uploads.tar.gz plugins
       - run:
           name: Copy database, themes and plugins
           command: |
-            scp database.tar.gz CircleCI@deployment.cp3402-2019-team25.dns-cloud.net:~/
-            scp themes.tar.gz CircleCI@deployment.cp3402-2019-team25.dns-cloud.net:~/
-            scp plugins.tar.gz CircleCI@deployment.cp3402-2019-team25.dns-cloud.net:~/
+            scp database.tar.gz CircleCI@staging.cp3402-2019-team25.dns-cloud.net:~/
+            scp themes.tar.gz CircleCI@staging.cp3402-2019-team25.dns-cloud.net:~/
+            scp plugins.tar.gz CircleCI@staging.cp3402-2019-team25.dns-cloud.net:~/
+            scp uploads.tar.gz CircleCI@staging.cp3402-2019-team25.dns-cloud.net:~/
       - run:
           name: Clean themes and plugins
           command: |
-            ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo rm -r /var/www/html/wp-content/themes"
-            ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo rm -r /var/www/html/wp-content/plugins"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -r /var/www/html/wp-content/themes"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -r /var/www/html/wp-content/plugins"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -r /var/www/html/wp-content/uploads"
       - run:
           name: Extract database, themes and plugins
           command: |
-            ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo tar -C /var/www/html/wp-content -zxvf ~/themes.tar.gz"
-            ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo tar -C /var/www/html/wp-content -zxvf ~/plugins.tar.gz"
-            ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo tar -C ~/ -zxvf ~/database.tar.gz"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo tar -C /var/www/html/wp-content -zxvf ~/themes.tar.gz"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo tar -C /var/www/html/wp-content -zxvf ~/plugins.tar.gz"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo tar -C /var/www/html/wp-content -zxvf ~/uploads.tar.gz"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo tar -C ~/ -zxvf ~/database.tar.gz"
       - run:
           name: Install website database plugins and themes, and cleanup
           command: |
-            ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo wp theme activate --path='/var/www/html' theme-cp3402-2019-team25 --allow-root"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp theme activate --path='/var/www/html' theme-cp3402-2019-team25 --allow-root"
       - run:
           name: Download and install WordPress
           command: |
-            ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo wp core download --path='/var/www/html' --force --allow-root"
-            ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo wp config create --path='/var/www/html' --force --dbname=wordpress --dbuser=WebAdmin --dbpass='gG5XCvUSL4keOwamsEz' --dbhost='127.0.0.1'" --allow-root
-            ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo wp core install --path='/var/www/html' --url='https:\/\/deployment.cp3402-2019-team25.dns-cloud.net' --title='a2-cp3402-2019-team25' --admin_user=WpAdmin --admin_password=gG5XCvUSL4keOwamsEz --admin_email=admin@example.com" --allow-root
-            ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo sed -i 's/192.168.33.10/deployment.cp3402-2019-team25.dns-cloud.net/g' ~/database/database-cp3402-2019-team25/mysql.sql"
-            ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo mysql -u'WebAdmin' -p'gG5XCvUSL4keOwamsEz' -h 127.0.0.1 wordpress < ~/database/database-cp3402-2019-team25/mysql.sql"
-            ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo wp core is-installed --path='/var/www/html' --allow-root"
-            ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "echo $?"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp core download --path='/var/www/html' --force --allow-root"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp config create --path='/var/www/html' --force --dbname=wordpress --dbuser=WebAdmin --dbpass='gG5XCvUSL4keOwamsEz' --dbhost='127.0.0.1'" --allow-root
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp core install --path='/var/www/html' --url='https:\/\/staging.cp3402-2019-team25.dns-cloud.net' --title='a2-cp3402-2019-team25' --admin_user=WpAdmin --admin_password=gG5XCvUSL4keOwamsEz --admin_email=admin@example.com" --allow-root
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo sed -i 's/192.168.33.10/staging.cp3402-2019-team25.dns-cloud.net/g' ~/database/database-cp3402-2019-team25/mysql.sql"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo mysql -u'WebAdmin' -p'gG5XCvUSL4keOwamsEz' -h 127.0.0.1 wordpress < ~/database/database-cp3402-2019-team25/mysql.sql"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp core is-installed --path='/var/www/html' --allow-root"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "echo $?"
       - run:
           name: Create WpAdmin user and wordpress database on the MYSQL server
           command: |
-            ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo mysql -u'root' -e 'CREATE DATABASE IF NOT EXISTS wordpress'"
-            ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo sed -i 's/scotchbox/wordpress/g' ~/database/database-cp3402-2019-team25/create_user.sql"
-            ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo mysql -u'root' < ~/database/database-cp3402-2019-team25/create_user.sql"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo mysql -u'root' -e 'CREATE DATABASE IF NOT EXISTS wordpress'"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo sed -i 's/scotchbox/wordpress/g' ~/database/database-cp3402-2019-team25/create_user.sql"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo mysql -u'root' < ~/database/database-cp3402-2019-team25/create_user.sql"
       - run:
           name: Cleanup server
           command: |
-            ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo rm -rf ~/database"
-            ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo rm -f ~/wp-cli.phar"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -rf ~/database"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -f ~/wp-cli.phar"
             rm database.tar.gz
             rm themes.tar.gz
             rm plugins.tar.gz
+            rm uploads.tar.gz
       - run:
           name: Deactivate Plugins
           command: |
-            ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo wp plugin deactivate --path='/var/www/html' wp-scss --allow-root"
-            ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo wp plugin deactivate --path='/var/www/html' elementor-pro --allow-root"
-            ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo wp plugin deactivate --path='/var/www/html' wordpress-seo --allow-root"
-            ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo wp plugin deactivate --path='/var/www/html' w3-total-cache --allow-root"
-      - run:
-          name: Move uploaded files
-          command: |
-            rsync -avh -e ssh uploads CircleCI@deployment.cp3402-2019-team25.dns-cloud.net:/var/www/html/wp-content
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp plugin deactivate --path='/var/www/html' wp-scss --allow-root"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp plugin deactivate --path='/var/www/html' elementor-pro --allow-root"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp plugin deactivate --path='/var/www/html' wordpress-seo --allow-root"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp plugin deactivate --path='/var/www/html' w3-total-cache --allow-root"
       - run:
           name: Close permissions
-          command: ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo chmod -R 755 /var/www/html/wp-content"
+          command: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo chmod -R 755 /var/www/html/wp-content"
       - run:
           name: Start apache2 webserver
-          command: ssh CircleCI@deployment.cp3402-2019-team25.dns-cloud.net -t "sudo service apache2 start"
+          command: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo service apache2 start"
       - run:
           name: Update submodules and push to github repo
           command: |
