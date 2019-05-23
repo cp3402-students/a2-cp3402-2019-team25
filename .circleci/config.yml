@@ -102,7 +102,9 @@ jobs:
       - run:
           name: Extract database, themes and plugins
           command: |
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo mkdir /var/www/html/wp-content/themes"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "tar -C /var/www/html/wp-content/themes -zxvf ~/themes.tar.gz"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo mkdir /var/www/html/wp-content/plugins"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "tar -C /var/www/html/wp-content/plugins -zxvf ~/plugins.tar.gz"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "tar -C ~/database -zxvf ~/database.tar.gz"
       - run:
