@@ -88,6 +88,7 @@ jobs:
             tar czf database.tar.gz database
             tar czf themes.tar.gz themes
             tar czf plugins.tar.gz plugins
+            databaseArchive1SHA1=sha1sum database.tar.gz
             ls -la
       - run:
           name: Copy database, themes and plugins
