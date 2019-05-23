@@ -145,7 +145,6 @@ jobs:
           name: Deactivate Plugins
           command: |
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp plugin deactivate --path='/var/www/html' wp-scss --allow-root"
-            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp plugin deactivate --path='/var/www/html' elementor-pro --allow-root"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp plugin deactivate --path='/var/www/html' wordpress-seo --allow-root"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp plugin deactivate --path='/var/www/html' w3-total-cache --allow-root"
       - run:
