@@ -106,7 +106,7 @@ jobs:
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -r /var/www/html/wp-content/plugins"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -r /var/www/html/wp-content/uploads"
       - run:
-          name: Extract database, themes and plugins
+          name: Extract database, themes, plugins and uploads
           command: |
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo tar -C /var/www/html/wp-content -zxvf ~/themes.tar.gz"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo tar -C /var/www/html/wp-content -zxvf ~/plugins.tar.gz"
@@ -137,10 +137,6 @@ jobs:
           command: |
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -rf ~/database"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -f ~/wp-cli.phar"
-            rm database.tar.gz
-            rm themes.tar.gz
-            rm plugins.tar.gz
-            rm uploads.tar.gz
       - run:
           name: Deactivate Plugins
           command: |
