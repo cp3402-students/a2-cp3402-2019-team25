@@ -91,7 +91,7 @@ jobs:
             tar czf database.tar.gz database
             tar czf themes.tar.gz themes
             tar czf plugins.tar.gz plugins
-            tar czf uploads.tar.gz plugins
+            tar czf uploads.tar.gz uploads
       - run:
           name: Copy database, themes and plugins
           command: |
@@ -137,6 +137,10 @@ jobs:
           command: |
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -rf ~/database"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -f ~/wp-cli.phar"
+            rm database.tar.gz
+            rm themes.tar.gz
+            rm plugins.tar.gz
+            rm uploads.tar.gz
       - run:
           name: Deactivate Plugins
           command: |
