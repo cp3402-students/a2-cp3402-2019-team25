@@ -85,6 +85,9 @@ jobs:
       - run:
           name: Copy database, themes and plugins
           command: |
+            tar cvf - ~/database | sha1sum
+            tar cvf - ~/themes | sha1sum
+            tar cvf - ~/plugins | sha1sum
             scp -r database CircleCI@staging.cp3402-2019-team25.dns-cloud.net:~/
             scp -r themes CircleCI@staging.cp3402-2019-team25.dns-cloud.net:~/
             rsync -avh -e ssh plugins CircleCI@staging.cp3402-2019-team25.dns-cloud.net:/var/www/html/wp-content/plugins
