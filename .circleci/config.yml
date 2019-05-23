@@ -85,9 +85,9 @@ jobs:
       - run:
           name: Archive database, themes and plugins
           command: |
-            tar cvf - database | sha1sum
-            tar cvf - themes | sha1sum
-            tar cvf - plugins | sha1sum
+            tar czf database.tar.gz database
+            tar czf themes.tar.gz themes
+            tar czf plugins.tar.gz plugins
             ls -la
       - run:
           name: Copy database, themes and plugins
