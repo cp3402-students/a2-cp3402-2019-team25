@@ -88,19 +88,26 @@ jobs:
             tar czf database.tar.gz database
             tar czf themes.tar.gz themes
             tar czf plugins.tar.gz plugins
-            echo 'export databaseArchive1SHA1=$(sha1sum database.tar.gz)' >> $BASH_ENV
-            echo ${databaseArchive1SHA1}
       - run:
           name: Copy database, themes and plugins
           command: |
-            scp -r database CircleCI@staging.cp3402-2019-team25.dns-cloud.net:~/
-            scp -r themes CircleCI@staging.cp3402-2019-team25.dns-cloud.net:~/
-            rsync -avh -e ssh plugins CircleCI@staging.cp3402-2019-team25.dns-cloud.net:/var/www/html/wp-content/plugins
+            scp database.tar.gz CircleCI@staging.cp3402-2019-team25.dns-cloud.net:~/
+            scp themes.tar.gz CircleCI@staging.cp3402-2019-team25.dns-cloud.net:~/
+            scp plugins.tar.gz CircleCI@staging.cp3402-2019-team25.dns-cloud.net:~/
+      - run:
+          name: Clean themes and plugins
+          command: |
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -r /var/www/html/wp-content/themes"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -r /var/www/html/wp-content/plugins"
+      - run:
+          name: Extract database, themes and plugins
+          command: |
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "tar -C /var/www/html/wp-content/themes -zxvf ~/themes.tar.gz"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "tar -C /var/www/html/wp-content/plugins -zxvf ~/plugins.tar.gz"
+            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "tar -C ~/database -zxvf ~/database.tar.gz"
       - run:
           name: Install website database plugins and themes, and cleanup
           command: |
-            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rsync -av ~/database /var/www/html/wp-content"
-            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rsync -av ~/themes /var/www/html/wp-content"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp theme activate --path='/var/www/html' theme-cp3402-2019-team25 --allow-root"
       - run:
           name: Download and install WordPress
@@ -122,8 +129,6 @@ jobs:
           name: Cleanup server
           command: |
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -rf ~/database"
-            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -rf ~/themes"
-            ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -rf ~/plugins"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo rm -f ~/wp-cli.phar"
             rm database.tar.gz
             rm themes.tar.gz
