@@ -88,6 +88,7 @@ jobs:
             tar cvf - database | sha1sum
             tar cvf - themes | sha1sum
             tar cvf - plugins | sha1sum
+            ls -la
       - run:
           name: Copy database, themes and plugins
           command: |
