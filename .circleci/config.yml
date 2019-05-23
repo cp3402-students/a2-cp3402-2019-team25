@@ -141,6 +141,10 @@ jobs:
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp plugin deactivate --path='/var/www/html' wordpress-seo --allow-root"
             ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo wp plugin deactivate --path='/var/www/html' w3-total-cache --allow-root"
       - run:
+          name: Move uploaded files
+          command: |
+            rsync -avh -e ssh uploads CircleCI@staging.cp3402-2019-team25.dns-cloud.net:/var/www/html/wp-content/uploads
+      - run:
           name: Start apache2 webserver
           command: ssh CircleCI@staging.cp3402-2019-team25.dns-cloud.net -t "sudo service apache2 start"
       - run:
