@@ -88,8 +88,8 @@ jobs:
             tar czf database.tar.gz database
             tar czf themes.tar.gz themes
             tar czf plugins.tar.gz plugins
-            sha1sum ~/database.tar.gz
-            echo 'export databaseArchive1SHA1= sha1sum ~/database.tar.gz' >> $BASH_ENV
+            sha1sum database.tar.gz
+            echo 'export databaseArchive1SHA1= sha1sum database.tar.gz' >> $BASH_ENV
             ls -la
             echo ${databaseArchive1SHA1}
       - run:
