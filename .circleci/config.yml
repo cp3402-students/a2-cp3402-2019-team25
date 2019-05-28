@@ -142,12 +142,6 @@ jobs:
             rm plugins.tar.gz
             rm uploads.tar.gz
       - run:
-          name: Deactivate Plugins
-          command: |
-            ssh CircleCI@35.201.21.232 -t "sudo wp plugin deactivate --path='/var/www/html' wp-scss --allow-root"
-            ssh CircleCI@35.201.21.232 -t "sudo wp plugin deactivate --path='/var/www/html' wordpress-seo --allow-root"
-            ssh CircleCI@35.201.21.232 -t "sudo wp plugin deactivate --path='/var/www/html' w3-total-cache --allow-root"
-      - run:
           name: Close permissions
           command: ssh CircleCI@35.201.21.232 -t "sudo chmod -R 755 /var/www/html/wp-content"
       - run:
@@ -250,12 +244,6 @@ jobs:
             rm themes.tar.gz
             rm plugins.tar.gz
             rm uploads.tar.gz
-      - run:
-          name: Deactivate Plugins
-          command: |
-            ssh CircleCI@35.244.72.62 -t "sudo wp plugin deactivate --path='/var/www/html' wp-scss --allow-root"
-            ssh CircleCI@35.244.72.62 -t "sudo wp plugin deactivate --path='/var/www/html' wordpress-seo --allow-root"
-            ssh CircleCI@35.244.72.62 -t "sudo wp plugin deactivate --path='/var/www/html' w3-total-cache --allow-root"
       - run:
           name: Close permissions
           command: ssh CircleCI@35.244.72.62 -t "sudo chmod -R 755 /var/www/html/wp-content"
