@@ -209,16 +209,6 @@ jobs:
             ssh CircleCI@35.244.72.62 -t "sudo rm -r /var/www/html/wp-content/plugins" || true
             ssh CircleCI@35.244.72.62 -t "sudo rm -r /var/www/html/wp-content/uploads" || true
       - run:
-          name: Download and install WordPress
-          command: |
-            ssh CircleCI@35.244.72.62 -t "sudo wp core download --path='/var/www/html' --force --allow-root"
-            ssh CircleCI@35.244.72.62 -t "sudo wp config create --path='/var/www/html' --force --dbname=wordpress --dbuser=WebAdmin --dbpass='gG5XCvUSL4keOwamsEz' --dbhost='127.0.0.1'" --allow-root
-            ssh CircleCI@35.244.72.62 -t "sudo wp core install --path='/var/www/html' --url='http:\/\/35.244.72.62' --title='a2-cp3402-2019-team25' --admin_user=WpAdmin --admin_password=gG5XCvUSL4keOwamsEz --admin_email=admin@example.com" --allow-root
-            ssh CircleCI@35.244.72.62 -t "sudo sed -i 's/192.168.33.10/35.244.72.62/g' ~/database/database-cp3402-2019-team25/mysql.sql"
-            ssh CircleCI@35.244.72.62 -t "sudo mysql -u'WebAdmin' -p'gG5XCvUSL4keOwamsEz' -h 127.0.0.1 wordpress < ~/database/database-cp3402-2019-team25/mysql.sql"
-            ssh CircleCI@35.244.72.62 -t "sudo wp core is-installed --path='/var/www/html' --allow-root"
-            ssh CircleCI@35.244.72.62 -t "echo $?"
-      - run:
           name: Extract database, themes, plugins and uploads
           command: |
             ssh CircleCI@35.244.72.62 -t "sudo tar -C /var/www/html/wp-content -zxvf ~/themes.tar.gz"
@@ -229,6 +219,16 @@ jobs:
           name: Install website database plugins and themes, and cleanup
           command: |
             ssh CircleCI@35.244.72.62 -t "sudo wp theme activate --path='/var/www/html' theme-cp3402-2019-team25 --allow-root"
+      - run:
+          name: Download and install WordPress
+          command: |
+            ssh CircleCI@35.244.72.62 -t "sudo wp core download --path='/var/www/html' --force --allow-root"
+            ssh CircleCI@35.244.72.62 -t "sudo wp config create --path='/var/www/html' --force --dbname=wordpress --dbuser=WebAdmin --dbpass='gG5XCvUSL4keOwamsEz' --dbhost='127.0.0.1'" --allow-root
+            ssh CircleCI@35.244.72.62 -t "sudo wp core install --path='/var/www/html' --url='http:\/\/35.244.72.62' --title='a2-cp3402-2019-team25' --admin_user=WpAdmin --admin_password=gG5XCvUSL4keOwamsEz --admin_email=admin@example.com" --allow-root
+            ssh CircleCI@35.244.72.62 -t "sudo sed -i 's/192.168.33.10/35.244.72.62/g' ~/database/database-cp3402-2019-team25/mysql.sql"
+            ssh CircleCI@35.244.72.62 -t "sudo mysql -u'WebAdmin' -p'gG5XCvUSL4keOwamsEz' -h 127.0.0.1 wordpress < ~/database/database-cp3402-2019-team25/mysql.sql"
+            ssh CircleCI@35.244.72.62 -t "sudo wp core is-installed --path='/var/www/html' --allow-root"
+            ssh CircleCI@35.244.72.62 -t "echo $?"
       - run:
           name: Create WpAdmin user and wordpress database on the MYSQL server
           command: |
