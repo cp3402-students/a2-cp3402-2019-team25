@@ -266,6 +266,9 @@ workflows:
       - staging:
           requires:
               - build-test
+      - deployment:
+          requires:
+              - staging
   hourly-staging:
     triggers:
       - schedule:
