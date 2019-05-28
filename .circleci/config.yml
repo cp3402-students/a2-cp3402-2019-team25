@@ -168,7 +168,7 @@ jobs:
           command: ping -c 4 35.244.72.62
       - run:
           name: Stop apache2 webserver
-          command: ssh CircleCI@35.244.72.62 -t "sudo service apache2 stop"
+          command: ssh CircleCI@35.244.72.62 -t "sudo service apache2 stop" || true
       - run:
           name: Set permissions to be open
           command: ssh CircleCI@35.244.72.62 -t "sudo chmod -R 777 /var/www/html/wp-content"
