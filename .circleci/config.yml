@@ -171,7 +171,7 @@ jobs:
           command: ssh CircleCI@35.244.72.62 -t "sudo service apache2 stop" || true
       - run:
           name: Set permissions to be open
-          command: ssh CircleCI@35.244.72.62 -t "sudo chmod -R 777 /var/www/html/wp-content"
+          command: ssh CircleCI@35.244.72.62 -t "sudo chmod -R 777 /var/www/html/wp-content" || true
       - run:
           name: Pull Submodules
           command: |
