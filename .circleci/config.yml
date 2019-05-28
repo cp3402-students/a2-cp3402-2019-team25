@@ -205,9 +205,9 @@ jobs:
       - run:
           name: Clean themes and plugins
           command: |
-            ssh CircleCI@35.244.72.62 -t "sudo rm -r /var/www/html/wp-content/themes"
-            ssh CircleCI@35.244.72.62 -t "sudo rm -r /var/www/html/wp-content/plugins"
-            ssh CircleCI@35.244.72.62 -t "sudo rm -r /var/www/html/wp-content/uploads"
+            ssh CircleCI@35.244.72.62 -t "sudo rm -r /var/www/html/wp-content/themes" || true
+            ssh CircleCI@35.244.72.62 -t "sudo rm -r /var/www/html/wp-content/plugins" || true
+            ssh CircleCI@35.244.72.62 -t "sudo rm -r /var/www/html/wp-content/uploads" || true
       - run:
           name: Extract database, themes, plugins and uploads
           command: |
