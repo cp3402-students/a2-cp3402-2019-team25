@@ -269,31 +269,7 @@ workflows:
       - deployment:
           requires:
               - staging
-  hourly-staging:
-    triggers:
-      - schedule:
-          cron: "0 * * * *"
-          filters:
-            branches:
-              only:
-                - master
-    jobs:
-      - build-test
-      - staging:
-          requires:
-              - build-test
   deployment:
-    jobs:
-      - deployment:
-          type: approval
-  daily-deployment:
-    triggers:
-      - schedule:
-          cron: "45 23 * * *"
-          filters:
-            branches:
-              only:
-                - master
     jobs:
       - deployment:
           type: approval
